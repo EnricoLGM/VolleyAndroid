@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -22,16 +24,28 @@ public class MainActivity extends AppCompatActivity {
     private Button btnRequest;
     private RequestQueue queue;
     private StringRequest stringRequest;
-    private String url = "https://run.mocky.io/v3/c47742d9-2df9-4357-9ead-56db7e548124";
+    //private String url = "https://run.mocky.io/v3/c47742d9-2df9-4357-9ead-56db7e548124";
+    private String url = "https://run.mocky.io/v3/024ea827-9c44-4a8d-a9fc-878ca9c82dfc";
+
+    private EditText usr;
+    private EditText pwd;
 
     private TextView testo;
+
+    private Button btnSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        btnRequest=(Button)findViewById(R.id.button);
+        btnRequest=(Button)findViewById(R.id.request);
         testo=(TextView)findViewById(R.id.textView);
+
+        usr=(EditText)findViewById(R.id.username);
+        pwd=(EditText)findViewById(R.id.password);
+
+        btnSearch=(Button)findViewById(R.id.search);
+        btnSearch.setVisibility(View.GONE);
 
         btnRequest.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,7 +68,11 @@ public class MainActivity extends AppCompatActivity {
                 //risposta di prova
                 try {
                     JSONObject json=new JSONObject(response);
-                    testo.setText("Nome: " + json.getString("name") + "\nEtà: " + json.getString("age"));
+                    testo.setText("Nome: " + json.getString("name") + "\nPassword: " + json.getString("password"));
+                    if(usr.getText().toString().equals(json.getString("name")) && pwd.getText().toString().equals(json.getString("password"))) {
+                        Toast.makeText(getApplicationContext(), "Nome e Password Verificati", Toast.LENGTH_LONG).show();
+                        btnSearch.setVisibility(View.VISIBLE);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
